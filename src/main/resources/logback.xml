@@ -1,0 +1,21 @@
+<configuration>
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>logback%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- 关闭 HikariCP 日志 -->
+    <logger name="com.zaxxer.hikari" level="OFF" />
+
+    <!-- 关闭 hibernate 日志 -->
+    <logger name="org.hibernate" level="OFF" />
+
+    <!-- 你的包名或默认根日志级别 -->
+    <logger name="org.example" level="DEBUG" />
+
+    <!-- 根日志设置，控制默认级别 -->
+    <root level="INFO">
+        <appender-ref ref="STDOUT" />
+    </root>
+</configuration>
