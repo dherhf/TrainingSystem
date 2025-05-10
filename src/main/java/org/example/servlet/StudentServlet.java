@@ -1,6 +1,5 @@
 package org.example.servlet;
 
-import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -20,7 +19,7 @@ public class StudentServlet extends HttpServlet {
 
     TemplateEngine engine;
     @Override
-    public void init() throws ServletException {
+    public void init() {
         engine = new TemplateEngine();
         //设定模板解析器决定了从哪里获取模板文件，这里直接使用ClassLoaderTemplateResolver表示加载内部资源文件
         ClassLoaderTemplateResolver r = new ClassLoaderTemplateResolver();
