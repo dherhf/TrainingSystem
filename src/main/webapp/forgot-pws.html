@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8" />
+    <title>找回密码 - TrainingSystem</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen bg-gray-100 flex items-center justify-center">
+
+<div class="bg-white shadow-xl rounded-xl p-8 w-full max-w-2xl">
+    <form>
+        <h2 class="text-3xl font-bold mb-2 text-center">
+            <span class="text-blue-600">Hello,</span> Welcome!
+        </h2>
+        <p class="text-gray-600 mb-6 text-center">输入您的邮箱，我们将发送重置链接给您</p>
+
+        <!-- 邮箱输入框 -->
+        <div class="relative mb-6">
+            <label>
+                <input type="text" placeholder="邮箱.." class="w-full pl-12 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+            </label>
+            <div class="absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-500">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8m-18 0a2 2 0 012-2h14a2 2 0 012 2m-18 0v8a2 2 0 002 2h14a2 2 0 002-2V8" />
+                </svg>
+            </div>
+        </div>
+
+        <!-- 按钮 -->
+        <div class="mb-4">
+            <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition">
+                发送密码
+            </button>
+        </div>
+
+        <!-- 登录提示 -->
+        <p class="text-center text-sm text-gray-600">
+            已有账号? <a href="index.html" class="text-blue-600 hover:underline">登录</a>
+        </p>
+    </form>
+</div>
+
+</body>
+</html>
