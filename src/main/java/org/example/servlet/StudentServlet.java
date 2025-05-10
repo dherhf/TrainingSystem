@@ -24,7 +24,6 @@ public class StudentServlet extends HttpServlet {
         engine = new TemplateEngine();
         //设定模板解析器决定了从哪里获取模板文件，这里直接使用ClassLoaderTemplateResolver表示加载内部资源文件
         ClassLoaderTemplateResolver r = new ClassLoaderTemplateResolver();
-        r.setPrefix("/templates/");
         r.setSuffix(".html");
         r.setTemplateMode("HTML");
 
