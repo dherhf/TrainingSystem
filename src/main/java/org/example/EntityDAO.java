@@ -17,7 +17,7 @@ public class EntityDAO {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             return session.createQuery("FROM Project", Project.class).list();
         } catch (Exception e) {
-            log.error("",e);
+            log.error("", e);
         }
         return null;
     }
@@ -59,9 +59,22 @@ public class EntityDAO {
         return null;
     }
 
+    public List<Student> getStudentsByPage(int projectId, int pageNumber, int pageSize) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return session.createQuery("FROM Student WHERE projectId = :projectId", Student.class)
+                    .setParameter("projectId", projectId)
+                    .setFirstResult((pageNumber - 1) * pageSize)
+                    .setMaxResults(pageSize)
+                    .list();
+        } catch (Exception e) {
+            log.error("分页查询学生列表时出错", e);
+        }
+        return null;
+    }
+
     public List<Student> getStudentByProjectId(int projectId) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            return session.createQuery("FROM Student WHERE projectId = :programId", Student.class)
+            return session.createQuery("FROM Student WHERE projectId = :projectId", Student.class)
                     .setParameter("projectId", projectId)
                     .list();
         } catch (Exception e) {
@@ -69,5 +82,7 @@ public class EntityDAO {
         }
         return null;
     }
+
+
 }
 

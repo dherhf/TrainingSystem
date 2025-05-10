@@ -8,7 +8,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.example.service.SignInService;
 
 import java.io.IOException;
-import java.util.Map;
 
 @WebServlet(value = "/sign-in", loadOnStartup = 1)
 public class SignInServlet extends HttpServlet {
@@ -28,7 +27,7 @@ public class SignInServlet extends HttpServlet {
 
         SignInService signInService = new SignInService();
         if (signInService.authenticate(username,password)) {
-            resp.sendRedirect("test.html");
+            resp.sendRedirect("dashboard");
         } else {
             resp.sendRedirect("/web");
         }
