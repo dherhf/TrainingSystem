@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>TrainingSystem | 管理后台</title>
-  <link href="./static/output.css" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="flex bg-gray-100 min-h-screen">
 
@@ -14,8 +14,101 @@
   <!-- 左侧主导航 Sidebar -->
   <aside th:replace="~{templates/sidebar.html :: sidebar}" class="w-60 bg-white border-r border-gray-200"></aside>
 
-  <p>仪表盘</p>
+  <div class="flex flex-1">
+    <!-- Main Content -->
+    <main class="flex-1 p-8">
+      <header class="mb-6">
+        <h1 class="text-3xl font-bold text-gray-800">欢迎使用学生培训管理系统</h1>
+      </header>
 
+      <!-- 数据概览卡片 -->
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+        <div class="bg-white rounded-2xl shadow p-6">
+          <p class="text-sm text-gray-500">在训学生</p>
+          <h2 class="text-2xl font-bold text-blue-600">320</h2>
+        </div>
+        <div class="bg-white rounded-2xl shadow p-6">
+          <p class="text-sm text-gray-500">已完成课程</p>
+          <h2 class="text-2xl font-bold text-green-600">1240</h2>
+        </div>
+        <div class="bg-white rounded-2xl shadow p-6">
+          <p class="text-sm text-gray-500">培训项目</p>
+          <h2 class="text-2xl font-bold text-purple-600">15</h2>
+        </div>
+        <div class="bg-white rounded-2xl shadow p-6">
+          <p class="text-sm text-gray-500">教师人数</p>
+          <h2 class="text-2xl font-bold text-orange-600">18</h2>
+        </div>
+      </div>
+
+      <!-- 学生培训进度 -->
+      <section class="mb-8">
+        <div class="bg-white rounded-2xl shadow p-6">
+          <h2 class="text-xl font-semibold mb-4">培训进度</h2>
+          <div class="space-y-4">
+            <div>
+              <p class="text-sm font-medium">李雷 - Java 基础</p>
+              <div class="w-full bg-gray-200 rounded-full h-2.5">
+                <div class="bg-blue-600 h-2.5 rounded-full" style="width: 70%"></div>
+              </div>
+            </div>
+            <div>
+              <p class="text-sm font-medium">韩梅梅 - Web 前端</p>
+              <div class="w-full bg-gray-200 rounded-full h-2.5">
+                <div class="bg-green-600 h-2.5 rounded-full" style="width: 45%"></div>
+              </div>
+            </div>
+            <div>
+              <p class="text-sm font-medium">王小明 - 数据库设计</p>
+              <div class="w-full bg-gray-200 rounded-full h-2.5">
+                <div class="bg-purple-600 h-2.5 rounded-full" style="width: 90%"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 最近培训记录 -->
+      <section>
+        <div class="bg-white rounded-2xl shadow p-6">
+          <h2 class="text-xl font-semibold mb-4">最新培训记录</h2>
+          <div class="overflow-x-auto">
+            <table class="min-w-full table-auto">
+              <thead>
+              <tr class="bg-gray-100 text-left text-sm font-semibold text-gray-700">
+                <th class="px-4 py-2">学生姓名</th>
+                <th class="px-4 py-2">课程名称</th>
+                <th class="px-4 py-2">状态</th>
+                <th class="px-4 py-2">得分</th>
+              </tr>
+              </thead>
+              <tbody class="text-sm text-gray-600">
+              <tr class="border-b">
+                <td class="px-4 py-2">李雷</td>
+                <td class="px-4 py-2">Java 基础</td>
+                <td class="px-4 py-2 text-green-600">完成</td>
+                <td class="px-4 py-2">95</td>
+              </tr>
+              <tr class="border-b">
+                <td class="px-4 py-2">韩梅梅</td>
+                <td class="px-4 py-2">Web 前端</td>
+                <td class="px-4 py-2 text-yellow-600">进行中</td>
+                <td class="px-4 py-2">-</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-2">王小明</td>
+                <td class="px-4 py-2">数据库设计</td>
+                <td class="px-4 py-2 text-red-600">未通过</td>
+                <td class="px-4 py-2">48</td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    </main>
+
+  </div>
 </div>
 
 </body>

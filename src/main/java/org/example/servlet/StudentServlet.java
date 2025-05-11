@@ -30,12 +30,17 @@ public class StudentServlet extends HttpServlet {
         int projectId = projectIdParam != null ? Integer.parseInt(projectIdParam) : 1;
         String pageSizeParam = req.getParameter("pageSize");
         int pageSize = pageSizeParam != null ? Integer.parseInt(pageSizeParam) : 10;
+        String pageNumberParam = req.getParameter("page");
+        int pageNumber = pageNumberParam != null ? Integer.parseInt(pageNumberParam) : 1;
 
-        int pageNumber = 1;
+        // 防止越界
         int totalStudents = entityDAO.getTotalStudentsByProjectId(projectId);
         int totalPages = (int) Math.ceil((double) totalStudents / pageSize);
 
-        List<Student> students = entityDAO.getStudentsByPage(projectId,1,pageSize);
+        if (pageNumber < 1) pageNumber = 1;
+        if (pageNumber > totalPages) pageNumber = totalPages;
+
+        List<Student> students = entityDAO.getStudentsByPage(projectId, pageNumber, pageSize);
         List<Project> projects = entityDAO.getAllProject();
 
         // Thymeleaf 上下文

@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>TrainingSystem | 管理后台</title>
-  <link href="./static/output.css" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="flex bg-gray-100 min-h-screen">
 <!-- 最外层容器：左侧 Sidebar + 右侧主区域 -->
@@ -17,14 +17,24 @@
   <div class="flex flex-1 overflow-hidden">
 
     <!-- 左：项目列表 -->
-    <aside class="w-32 p-6 bg-white border-r border-gray-200 overflow-y-auto">
+    <aside class="w-35 p-6 bg-white border-r border-gray-200 overflow-y-auto">
       <h2 class="text-lg font-semibold mb-4 text-gray-700">项目列表</h2>
       <ul class="space-y-2 text-sm">
         <li th:each="project : ${projects}">
-          <a th:href="@{/student(projectId=${project.getId()})}"
-             th:classappend="${project.id == projectId} ? 'bg-blue-600 text-white font-semibold shadow-md' : ''"
+          <a th:classappend="${project.id == projectId} ? 'bg-blue-600 text-white shadow-md' : ''"
+             th:href="@{/student(projectId=${project.id}, pageSize=${pageSize})}"
              th:text="${project.getProjectName()}"
              class="block px-3 py-2 rounded hover:bg-blue-100 hover:text-blue-600 transition duration-150">
+          </a>
+        </li>
+        <li>
+          <a class="group flex items-center justify-center w-full h-9 rounded hover:bg-green-100 transition duration-150"
+             href="#">
+            <svg class="w-5 h-5 text-green-300 group-hover:text-green-600 transition duration-150"
+                 fill="none"
+                 stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 4v16m8-8H4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+            </svg>
           </a>
         </li>
       </ul>
@@ -37,10 +47,10 @@
       <!-- 表格盒子 -->
       <div class="bg-white rounded-xl shadow overflow-x-auto">
         <table class="min-w-full table-auto text-sm text-gray-700">
-          <thead class="bg-gray-50 text-xs text-gray-500 uppercase">
+          <thead class="bg-gray-50 text-gray-500 uppercase">
           <tr>
-            <th class="px-2 py-3"><label>
-              <input type="checkbox" class="checkbox checkbox-primary" />
+            <th class="px-4 py-3"><label>
+              <input class="checkbox checkbox-primary" type="checkbox"/>
             </label></th>
             <th class="px-4 py-3 text-center">ID</th>
             <th class="px-4 py-3 text-center">项目ID</th>
@@ -54,8 +64,8 @@
           <!--/*@thymesVar id="students" type="org.example.entity.Student"*/-->
           <tbody class="divide-y divide-gray-200" th:each="student : ${students}">
           <tr class="hover:bg-blue-50 transition">
-            <td class="px-2 py-3"><label>
-              <input type="checkbox" class="checkbox checkbox-primary" />
+            <td class="px-4 py-3"><label>
+              <input class="checkbox checkbox-primary" type="checkbox"/>
             </label></td>
             <td class="text-center px-4 py-3" th:text="${student.getId()}"></td>
             <td class="text-center px-4 py-3" th:text="${student.getProjectId()}"></td>
@@ -69,54 +79,81 @@
       </div>
 
       <!-- 分页 -->
+      <!-- 分页 -->
       <div class="flex flex-col md:flex-row justify-between items-center gap-4 mt-6">
+        <!-- 分页大小选择 -->
         <div class="flex items-center gap-2 text-sm">
-          <label>
-            <select name="pageSize" class="select select-bordered rounded-md"
-                    onchange="location.href='?page=1&pageSize=' + this.value">
-              <option value="10" th:selected="${pageSize == 10}">10</option>
-              <option value="25" th:selected="${pageSize == 25}">25</option>
-              <option value="50" th:selected="${pageSize == 50}">50</option>
-              <option value="100" th:selected="${pageSize == 100}">100</option>
-            </select>
-          </label>
+          <form id="pageSizeForm" method="get" th:action="@{/student}">
+            <input name="projectId" th:value="${projectId}" type="hidden"/>
+            <label>
+              <select class="border border-gray-300 rounded-md px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      name="pageSize"
+                      onchange="document.getElementById('pageSizeForm').submit()">
+                <option th:selected="${pageSize == 10}" value="10">10</option>
+                <option th:selected="${pageSize == 25}" value="25">25</option>
+                <option th:selected="${pageSize == 50}" value="50">50</option>
+                <option th:selected="${pageSize == 100}" value="100">100</option>
+              </select>
+            </label>
+          </form>
           <span class="text-gray-600">
-            第 <span th:text="${pageNumber}" class="font-semibold text-blue-600"></span> 页 /
-            共 <span th:text="${totalPages}" class="font-semibold text-blue-600"></span> 页
-          </span>
+      第 <span class="font-semibold text-blue-600" th:text="${pageNumber}"></span> 页 /
+      共 <span class="font-semibold text-blue-600" th:text="${totalPages}"></span> 页
+    </span>
         </div>
 
-        <div class="btn-group">
-          <button class="btn btn-outline btn-sm rounded-md" title="第一页">
-            <svg xmlns="http://www.w3.org/2000/svg" class="size-5" fill="none" viewBox="0 0 24 24"
+        <!-- 分页按钮 -->
+        <div class="flex items-center gap-2">
+          <!-- 首页 -->
+          <a class="border border-gray-300 text-gray-700 hover:bg-gray-100 rounded-md px-2 py-1 text-sm flex items-center"
+             th:classappend="${pageNumber == 1} ? 'pointer-events-none opacity-50' : ''"
+             th:href="@{/student(projectId=${projectId}, page=1, pageSize=${pageSize})}">
+            <!-- 双左箭头 -->
+            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"
                  stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                     d="m18.75 4.5-7.5 7.5 7.5 7.5m-6-15L5.25 12l7.5 7.5"/>
             </svg>
-          </button>
-          <button class="btn btn-outline btn-sm rounded-md" title="上一页">
-            <svg xmlns="http://www.w3.org/2000/svg" class="size-5" fill="none" viewBox="0 0 24 24"
+          </a>
+
+          <!-- 上一页 -->
+          <a class="border border-gray-300 text-gray-700 hover:bg-gray-100 rounded-md px-2 py-1 text-sm flex items-center"
+             th:classappend="${pageNumber == 1} ? 'pointer-events-none opacity-50' : ''"
+             th:href="@{/student(projectId=${projectId}, page=${pageNumber - 1}, pageSize=${pageSize})}">
+            <!-- 左箭头 -->
+            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"
                  stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                     d="M15.75 19.5 8.25 12l7.5-7.5"/>
             </svg>
-          </button>
-          <button class="btn btn-outline btn-sm rounded-md" title="下一页">
-            <svg xmlns="http://www.w3.org/2000/svg" class="size-5" fill="none" viewBox="0 0 24 24"
+          </a>
+
+          <!-- 下一页 -->
+          <a class="border border-gray-300 text-gray-700 hover:bg-gray-100 rounded-md px-2 py-1 text-sm flex items-center"
+             th:classappend="${pageNumber == totalPages} ? 'pointer-events-none opacity-50' : ''"
+             th:href="@{/student(projectId=${projectId}, page=${pageNumber + 1}, pageSize=${pageSize})}">
+            <!-- 右箭头 -->
+            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"
                  stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                     d="m8.25 4.5 7.5 7.5-7.5 7.5"/>
             </svg>
-          </button>
-          <button class="btn btn-outline btn-sm rounded-md" title="最后一页">
-            <svg xmlns="http://www.w3.org/2000/svg" class="size-5" fill="none" viewBox="0 0 24 24"
+          </a>
+
+          <!-- 尾页 -->
+          <a class="border border-gray-300 text-gray-700 hover:bg-gray-100 rounded-md px-2 py-1 text-sm flex items-center"
+             th:classappend="${pageNumber == totalPages} ? 'pointer-events-none opacity-50' : ''"
+             th:href="@{/student(projectId=${projectId}, page=${totalPages}, pageSize=${pageSize})}">
+            <!-- 双右箭头 -->
+            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"
                  stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                     d="m5.25 4.5 7.5 7.5-7.5 7.5m6-15 7.5 7.5-7.5 7.5"/>
             </svg>
-          </button>
+          </a>
         </div>
       </div>
+
     </main>
   </div>
 </div>
