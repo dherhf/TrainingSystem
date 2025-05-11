@@ -27,22 +27,25 @@ public class StudentServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String projectIdParam = req.getParameter("projectId");
-        System.out.println("test" + projectIdParam);
-        List<Student> students;
-        if (projectIdParam == null) {
-            students = entityDAO.getStudentByProjectId(1);
-        } else {
-            students = entityDAO.getStudentByProjectId(Integer.parseInt(projectIdParam));
-        }
+        int projectId = projectIdParam != null ? Integer.parseInt(projectIdParam) : 1;
+        String pageSizeParam = req.getParameter("pageSize");
+        int pageSize = pageSizeParam != null ? Integer.parseInt(pageSizeParam) : 10;
 
+        int pageNumber = 1;
+        int totalStudents = entityDAO.getTotalStudentsByProjectId(projectId);
+        int totalPages = (int) Math.ceil((double) totalStudents / pageSize);
+
+        List<Student> students = entityDAO.getStudentsByPage(projectId,1,pageSize);
         List<Project> projects = entityDAO.getAllProject();
 
         // Thymeleaf 上下文
         WebContext context = new WebContext(application.buildExchange(req, resp));
+        context.setVariable("projectId", projectId);
         context.setVariable("students", students);
         context.setVariable("projects", projects);
-        context.setVariable("pageNumber", 1);
-        context.setVariable("totalPages", 10);
+        context.setVariable("pageNumber", pageNumber);
+        context.setVariable("totalPages", totalPages);
+        context.setVariable("pageSize", pageSize);
 
 
         ThymeleafUtil.process("student.html", context, resp.getWriter());

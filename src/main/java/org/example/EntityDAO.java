@@ -7,6 +7,7 @@ import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public class EntityDAO {
@@ -50,7 +51,7 @@ public class EntityDAO {
         }
     }
 
-    public List<Student> getAllStudent() {
+    public List<Student> getAllStudents() {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             return session.createQuery("FROM Student", Student.class).list();
         } catch (Exception e) {
@@ -72,7 +73,7 @@ public class EntityDAO {
         return null;
     }
 
-    public List<Student> getStudentByProjectId(int projectId) {
+    public List<Student> getStudentsByProjectId(int projectId) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             return session.createQuery("FROM Student WHERE projectId = :projectId", Student.class)
                     .setParameter("projectId", projectId)
@@ -82,6 +83,48 @@ public class EntityDAO {
         }
         return null;
     }
+
+    public int getTotalStudentsByProjectId(int projectId) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return session.createQuery("SELECT COUNT(*) FROM Student WHERE projectId = :projectId", Long.class)
+                    .setParameter("projectId", projectId)
+                    .uniqueResult()
+                    .intValue();
+        } catch (Exception e) {
+            log.error("根据项目ID获取学生总数时出错", e);
+        }
+        return 0;
+    }
+
+    public void addStudentsToProjects() {
+        List<Project> projects = getAllProject();
+        if (projects != null) {
+            for (Project project : projects) {
+                try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+                    session.beginTransaction();
+                    for (int i = 1; i <= 200; i++) {
+                        Student student = new Student();
+                        student.setId("B" + String.format("%04d", project.getId()) + String.format("%03d", i));
+                        student.setStudentName("Student " + i);
+                        student.setProjectId(project.getId());
+                        student.setRegistrationDate(LocalDate.now()); // 初始化 registrationDate 字段
+                        student.setTuition(0); // 初始化 tuition 字段
+                        student.setGrades(0); // 初始化 grades 字段
+                        session.persist(student);
+                    }
+                    session.getTransaction().commit();
+                } catch (Exception e) {
+                    log.error("为项目添加学生时出错", e);
+                }
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        EntityDAO dao = new EntityDAO();
+        dao.addStudentsToProjects();
+    }
+
 
 
 }
