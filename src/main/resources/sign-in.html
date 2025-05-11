@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="zh-cn">
+<html xmlns:th="http://www.thymeleaf.org" lang="zh-cn">
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>登录 - TrainingSystem</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="./static/output.css" rel="stylesheet">
 </head>
 <body class="min-h-screen flex items-center justify-center bg-gray-100">
 
@@ -14,7 +14,8 @@
         <h2 class="text-3xl font-semibold mb-2 text-center">
             <span class="text-blue-600">Hello,</span> Welcome!
         </h2>
-        <p class="mb-6 text-gray-600 text-center">请在下方填写您的详细信息以继续</p>
+        <p th:unless="${failed}" class="mb-6 text-gray-600 text-center">请在下方填写您的详细信息以继续</p>
+        <p th:if="${failed}" class="mb-6 text-red-600 text-center">您的用户名或密码输入错误</p>
 
         <form method="post" action="sign-in">
             <!--  用户名字段 -->
@@ -50,7 +51,7 @@
             <!-- 其他字段 -->
             <div class="flex items-center justify-between mb-6 text-sm text-gray-600">
                 <label class="flex items-center">
-                    <input type="checkbox" class="mr-2">
+                    <input type="checkbox" class="mr-2" name="remember-me">
                     记住我
                 </label>
                 <a href="forgot-pws.html" class="text-blue-600 hover:underline">忘记密码?</a>
@@ -62,7 +63,7 @@
                         class="w-1/2 bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg font-medium transition mr-2">
                     登录
                 </button>
-                <a href="register.html"
+                <a href="sign-up.html"
                    class="w-1/2 bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-lg font-medium text-center transition">
                     注册
                 </a>

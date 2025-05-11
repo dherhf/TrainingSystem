@@ -5,38 +5,46 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.example.EntityDAO;
+import org.example.entity.Project;
 import org.example.entity.Student;
-import org.thymeleaf.TemplateEngine;
-import org.thymeleaf.context.Context;
-import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
-
+import org.example.util.ThymeleafUtil;
+import org.thymeleaf.context.WebContext;
+import org.thymeleaf.web.servlet.JakartaServletWebApplication;
 
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet("/dashboard")
+@WebServlet("/student")
 public class StudentServlet extends HttpServlet {
-
-    TemplateEngine engine;
+    private EntityDAO entityDAO;
+    private JakartaServletWebApplication application;
     @Override
     public void init() {
-        engine = new TemplateEngine();
-        //设定模板解析器决定了从哪里获取模板文件，这里直接使用ClassLoaderTemplateResolver表示加载内部资源文件
-        ClassLoaderTemplateResolver r = new ClassLoaderTemplateResolver();
-        r.setSuffix(".html");
-        r.setTemplateMode("HTML");
-
-        engine.setTemplateResolver(r);
+        entityDAO = new EntityDAO();
+        application = JakartaServletWebApplication.buildApplication(getServletContext());
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        EntityDAO entityDAO = new EntityDAO();
-        List<Student> students = entityDAO.getAllStudent();
-        //创建上下文，上下文中包含了所有需要替换到模板中的内容
-        Context context = new Context();
+        String projectIdParam = req.getParameter("projectId");
+        System.out.println("test" + projectIdParam);
+        List<Student> students;
+        if (projectIdParam == null) {
+            students = entityDAO.getStudentByProjectId(1);
+        } else {
+            students = entityDAO.getStudentByProjectId(Integer.parseInt(projectIdParam));
+        }
+
+        List<Project> projects = entityDAO.getAllProject();
+
+        // Thymeleaf 上下文
+        WebContext context = new WebContext(application.buildExchange(req, resp));
         context.setVariable("students", students);
-        // 处理模板
-        engine.process("dashboard", context, resp.getWriter());
+        context.setVariable("projects", projects);
+        context.setVariable("pageNumber", 1);
+        context.setVariable("totalPages", 10);
+
+
+        ThymeleafUtil.process("student.html", context, resp.getWriter());
     }
 }

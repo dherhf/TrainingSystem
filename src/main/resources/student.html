@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TrainingSystem | 管理后台</title>
+  <link href="./static/output.css" rel="stylesheet">
+</head>
+<body class="flex bg-gray-100 min-h-screen">
+
+<!-- 最外层容器：左侧 Sidebar + 右侧主区域 -->
+<div class="flex flex-1">
+
+  <!-- 左侧主导航 Sidebar -->
+  <aside th:replace="~{templates/sidebar.html :: sidebar}" class="w-60 bg-white border-r border-gray-200"></aside>
+
+  <!-- 主内容区域：项目列表 + 学生数据 -->
+  <div class="flex flex-1 overflow-hidden">
+
+    <!-- 左：项目列表 -->
+    <aside class="w-32 p-6 bg-white border-r border-gray-200 overflow-y-auto">
+      <h2 class="text-lg font-semibold mb-4 text-gray-700">项目列表</h2>
+      <ul class="space-y-2 text-sm">
+        <li th:each="project : ${projects}">
+          <a th:href="@{/students(projectId=${project.getId()})}"
+             th:text="${project.getProjectName()}"
+             class="block px-3 py-2 rounded hover:bg-blue-100 hover:text-blue-600 transition duration-150">
+          </a>
+        </li>
+      </ul>
+    </aside>
+
+    <!-- 右：学生数据表格 -->
+    <main class="flex-1 p-8 overflow-y-auto">
+      <h1 class="text-3xl font-bold text-gray-800 mb-6">学生数据</h1>
+
+      <!-- 表格盒子 -->
+      <div class="bg-white rounded-xl shadow overflow-x-auto">
+        <table class="min-w-full table-auto text-sm text-gray-700">
+          <thead class="bg-gray-50 text-xs text-gray-500 uppercase">
+          <tr>
+            <th class="px-2 py-3"><label>
+              <input type="checkbox" class="checkbox checkbox-primary" />
+            </label></th>
+            <th class="px-4 py-3 text-center">ID</th>
+            <th class="px-4 py-3 text-center">项目ID</th>
+            <th class="px-4 py-3 text-center">姓名</th>
+            <th class="px-4 py-3 text-center">入学日期</th>
+            <th class="px-4 py-3 text-center">学费</th>
+            <th class="px-4 py-3 text-center">成绩</th>
+            <th></th>
+          </tr>
+          </thead>
+          <!--/*@thymesVar id="students" type="org.example.entity.Student"*/-->
+          <tbody class="divide-y divide-gray-200" th:each="student : ${students}">
+          <tr class="hover:bg-blue-50 transition">
+            <td class="px-2 py-3"><label>
+              <input type="checkbox" class="checkbox checkbox-primary" />
+            </label></td>
+            <td class="text-center px-4 py-3" th:text="${student.getId()}"></td>
+            <td class="text-center px-4 py-3" th:text="${student.getProjectId()}"></td>
+            <td class="text-center px-4 py-3" th:text="${student.getStudentName()}"></td>
+            <td class="text-center px-4 py-3" th:text="${student.getRegistrationDate()}"></td>
+            <td class="text-center px-4 py-3" th:text="${student.getTuition()}"></td>
+            <td class="text-center px-4 py-3" th:text="${student.getGrades()}"></td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- 分页 -->
+      <div class="flex flex-col md:flex-row justify-between items-center gap-4 mt-6">
+        <div class="flex items-center gap-2 text-sm">
+          <label>
+            <select class="select select-bordered rounded-md">
+              <option>10</option>
+              <option>25</option>
+              <option>50</option>
+              <option>100</option>
+            </select>
+          </label>
+          <span class="text-gray-600">
+            第 <span th:text="${pageNumber}" class="font-semibold text-blue-600"></span> 页 /
+            共 <span th:text="${totalPages}" class="font-semibold text-blue-600"></span> 页
+          </span>
+        </div>
+
+        <div class="btn-group">
+          <button class="btn btn-outline btn-sm rounded-md" title="第一页">
+            <svg xmlns="http://www.w3.org/2000/svg" class="size-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                    d="m18.75 4.5-7.5 7.5 7.5 7.5m-6-15L5.25 12l7.5 7.5"/>
+            </svg>
+          </button>
+          <button class="btn btn-outline btn-sm rounded-md" title="上一页">
+            <svg xmlns="http://www.w3.org/2000/svg" class="size-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                    d="M15.75 19.5 8.25 12l7.5-7.5"/>
+            </svg>
+          </button>
+          <button class="btn btn-outline btn-sm rounded-md" title="下一页">
+            <svg xmlns="http://www.w3.org/2000/svg" class="size-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                    d="m8.25 4.5 7.5 7.5-7.5 7.5"/>
+            </svg>
+          </button>
+          <button class="btn btn-outline btn-sm rounded-md" title="最后一页">
+            <svg xmlns="http://www.w3.org/2000/svg" class="size-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                    d="m5.25 4.5 7.5 7.5-7.5 7.5m6-15 7.5 7.5-7.5 7.5"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+</body>
+
+</html>
