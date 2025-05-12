@@ -18,6 +18,7 @@ import java.util.List;
 public class StudentServlet extends HttpServlet {
     private EntityDAO entityDAO;
     private JakartaServletWebApplication application;
+
     @Override
     public void init() {
         entityDAO = new EntityDAO();
@@ -35,10 +36,13 @@ public class StudentServlet extends HttpServlet {
 
         // 防止越界
         int totalStudents = entityDAO.getTotalStudentsByProjectId(projectId);
+
         int totalPages = (int) Math.ceil((double) totalStudents / pageSize);
 
-        if (pageNumber < 1) pageNumber = 1;
+
         if (pageNumber > totalPages) pageNumber = totalPages;
+        if (pageNumber < 1) pageNumber = 1;
+
 
         List<Student> students = entityDAO.getStudentsByPage(projectId, pageNumber, pageSize);
         List<Project> projects = entityDAO.getAllProject();
