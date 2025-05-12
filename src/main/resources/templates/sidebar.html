@@ -2,51 +2,32 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="zh-CN">
 <body>
 <!-- 侧边栏 -->
-<aside class="w-64 bg-gradient-to-b from-blue-900 to-blue-800 text-white min-h-screen shadow-lg" th:fragment="sidebar">
-  <div class="p-6 text-2xl font-extrabold tracking-wide text-center border-b border-blue-700">
-    <span class="text-white">Training</span><span class="text-blue-300">System</span>
-  </div>
-  <nav class="mt-6 space-y-1 px-4 font-medium text-sm">
-    <a class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 bg-blue-700 hover:bg-blue-600 group"
-       href="dashboard">
-      <svg class="w-5 h-5 group-hover:text-blue-200" fill="none" stroke="currentColor"
-           stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-        <path stroke-linecap="round" stroke-linejoin="round"
-              d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25"/>
-      </svg>
-      <span>仪表盘</span>
-    </a>
+<aside class="w-64 bg-gradient-to-b from-blue-900 to-blue-800 text-white min-h-screen shadow-lg mr-6"
+       th:fragment="sidebar">
+    <div class="p-6 text-2xl font-extrabold tracking-wide text-center border-b border-blue-700">
+        <span class="text-white">Training</span><span class="text-blue-300">System</span>
+    </div>
+    <nav class="mt-6 space-y-1 px-4 font-medium text-sm">
+        <a class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 hover:bg-blue-700 group"
+           href="dashboard">
+            <svg class="w-5 h-5 group-hover:text-blue-200" fill="none" stroke="currentColor"
+                 stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" stroke-linecap="round"
+                      stroke-linejoin="round"/>
+            </svg>
+            <span>仪表盘</span>
+        </a>
 
-    <a class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 hover:bg-blue-700 group"
-       href="student">
-      <svg class="w-5 h-5 group-hover:text-blue-200" fill="none" stroke="currentColor"
-           stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-        <path stroke-linecap="round" stroke-linejoin="round"
-              d="M8.25 6.75h12M8.25 12h12m-12 5.25h12M3.75 6.75h.007v.008H3.75V6.75Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0ZM3.75 12h.007v.008H3.75V12Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm-.375 5.25h.007v.008H3.75v-.008Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z"/>
-      </svg>
-      <span>学生管理</span>
-    </a>
-
-    <a class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 hover:bg-blue-700 group"
-       href="#">
-      <svg class="w-5 h-5 group-hover:text-blue-200" fill="none" stroke="currentColor"
-           stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-        <path stroke-linecap="round" stroke-linejoin="round"
-              d="M8.25 6.75h12M8.25 12h12m-12 5.25h12M3.75 6.75h.007v.008H3.75V6.75Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0ZM3.75 12h.007v.008H3.75V12Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm-.375 5.25h.007v.008H3.75v-.008Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z"/>
-      </svg>
-      <span>项目管理</span>
-    </a>
-
-    <a class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 hover:bg-blue-700 group"
-       href="#">
-      <svg class="w-5 h-5 group-hover:text-blue-200" fill="none" stroke="currentColor"
-           stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-        <path stroke-linecap="round" stroke-linejoin="round"
-              d="M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0 4.121-.952 4.125 4.125 0 0 0-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 0 1 8.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0 1 11.964-3.07M12 6.375a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0Zm8.25 2.25a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0Z"/>
-      </svg>
-      <span>用户管理</span>
-    </a>
-  </nav>
+        <a class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 hover:bg-blue-700 group"
+           href="student">
+            <svg class="w-5 h-5 group-hover:text-blue-200" fill="none" stroke="currentColor"
+                 stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M8.25 6.75h12M8.25 12h12m-12 5.25h12M3.75 6.75h.007v.008H3.75V6.75Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0ZM3.75 12h.007v.008H3.75V12Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm-.375 5.25h.007v.008H3.75v-.008Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" stroke-linecap="round"
+                      stroke-linejoin="round"/>
+            </svg>
+            <span>学生管理</span>
+        </a>
+    </nav>
 </aside>
 </body>
 </html>
