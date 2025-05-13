@@ -73,6 +73,15 @@ public class EntityDAO {
 
     }
 
+    public void addStudent(String id, int projectId, String studentName, LocalDate registrationDate, int tuition, int grades) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            session.beginTransaction();
+            Student student = new Student(id, projectId, studentName, registrationDate, tuition, grades);
+            session.persist(student);
+            session.getTransaction().commit();
+        }
+    }
+
     public List<Student> getAllStudents() {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             return session.createQuery("FROM Student", Student.class).list();

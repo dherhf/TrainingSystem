@@ -28,11 +28,11 @@ public class Student {
     public Student() {
     }
 
-    public Student(String id, int projectId, String studentName, String registrationDate, int tuition, int grades) {
+    public Student(String id, int projectId, String studentName, LocalDate registrationDate, int tuition, int grades) {
         this.id = id;
         this.projectId = projectId;
         this.studentName = studentName;
-        this.registrationDate = LocalDate.parse(registrationDate);
+        this.registrationDate = registrationDate;
         this.tuition = tuition;
         this.grades = grades;
     }

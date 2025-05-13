@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.example.EntityDAO;
 
 import java.io.IOException;
+import java.time.LocalDate;
 
 @WebServlet("/addStudent")
 public class AddStudent extends HttpServlet {
@@ -23,9 +24,10 @@ public class AddStudent extends HttpServlet {
         String id = req.getParameter("id");
         String studentName = req.getParameter("studentName");
         int projectId = entityDAO.getProjectIdByName(req.getParameter("projectName"));
-        String registrationDate = req.getParameter("registrationDate");
+        LocalDate registrationDate = LocalDate.parse(req.getParameter("registrationDate"));
         int tuition = Integer.parseInt(req.getParameter("tuition"));
         int grades = Integer.parseInt(req.getParameter("grades"));
-        System.out.println(studentName + projectId + registrationDate + tuition + grades);
+        entityDAO.addStudent(id, projectId, studentName, registrationDate, tuition, grades);
+        resp.sendRedirect(req.getContextPath() + "/student");
     }
 }
