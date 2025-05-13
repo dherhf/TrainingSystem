@@ -30,8 +30,8 @@ public class StudentServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String projectNameParam = req.getParameter("projectName");
         String projectName = projectNameParam != null ? projectNameParam : entityDAO.getProjectNameById(1);
-        String projectIdParam = req.getParameter("projectId");
-        int projectId = projectIdParam != null ? Integer.parseInt(projectIdParam) : 1;
+
+        int projectId = entityDAO.getProjectIdByName(projectName);
         String pageSizeParam = req.getParameter("pageSize");
         int pageSize = pageSizeParam != null ? Integer.parseInt(pageSizeParam) : 10;
         String pageParam = req.getParameter("page");
@@ -45,7 +45,6 @@ public class StudentServlet extends HttpServlet {
 
         if (page > totalPages) page = totalPages;
         if (page < 1) page = 1;
-
 
         List<Student> students = entityDAO.getStudentsByPage(projectId, page, pageSize);
         List<Project> projects = entityDAO.getAllProject();
