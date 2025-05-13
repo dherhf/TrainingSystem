@@ -51,6 +51,28 @@ public class EntityDAO {
         }
     }
 
+    public String getProjectNameById(int id) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return session.get(Project.class, id).getProjectName();
+        } catch (Exception e) {
+            log.error("获取项目名称时出错", e);
+            return null;
+        }
+
+    }
+
+    public int getProjectIdByName(String projectName) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return session.createQuery("SELECT id FROM Project WHERE projectName = :projectName", Integer.class)
+                    .setParameter("projectName", projectName)
+                    .uniqueResult();
+        } catch (Exception e) {
+            log.error("获取项目ID时出错", e);
+            return 0;
+        }
+
+    }
+
     public List<Student> getAllStudents() {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             return session.createQuery("FROM Student", Student.class).list();
@@ -120,10 +142,6 @@ public class EntityDAO {
         }
     }
 
-    public static void main(String[] args) {
-        EntityDAO dao = new EntityDAO();
-        dao.addStudentsToProjects();
-    }
 
 
 

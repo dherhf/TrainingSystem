@@ -13,12 +13,22 @@
             });
         }
 
-        function openModal() {
+        function openAddProjectModal() {
             document.getElementById('addProjectModal').style.display = 'flex';
         }
 
-        function closeModal() {
+        function closeAddProjectModal() {
             document.getElementById('addProjectModal').style.display = 'none';
+        }
+
+        // 打开添加学生弹窗
+        function openAddStudentModal() {
+            document.getElementById('addStudentModal').style.display = 'flex';
+        }
+
+        // 关闭添加学生弹窗
+        function closeAddStudentModal() {
+            document.getElementById('addStudentModal').style.display = 'none';
         }
     </script>
 </head>
@@ -38,14 +48,14 @@
             <ul class="space-y-2 text-sm">
                 <li th:each="project : ${projects}">
                     <a class="block px-3 py-2 rounded hover:bg-blue-100 hover:text-blue-600 transition duration-150"
-                       th:classappend="${project.id == projectId} ? 'bg-blue-600 text-white shadow-md' : ''"
-                       th:href="@{/student(projectId=${project.id}, pageSize=${pageSize})}"
+                       th:classappend="${project.projectName == projectName} ? 'bg-blue-600 text-white shadow-md' : ''"
+                       th:href="@{/student(projectName=${project.projectName}, page=${page},pageSize=${pageSize})}"
                        th:text="${project.getProjectName()}">
                     </a>
                 </li>
                 <li>
                     <a class="group flex items-center justify-center w-full h-9 rounded hover:bg-green-100 transition duration-150"
-                       href="#" onclick="openModal(); return false;">
+                       href="#" onclick="openAddProjectModal(); return false;">
                         <svg class="w-5 h-5 text-green-300 group-hover:text-green-600 transition duration-150"
                              fill="none"
                              stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -100,7 +110,8 @@
                 <div class="flex items-center gap-2 text-sm">
                     <!-- 分页大小选择 -->
                     <form id="pageSizeForm" method="get" th:action="@{/student}">
-                        <input name="projectId" th:value="${projectId}" type="hidden"/>
+                        <input name="projectName" th:value="${projectName}" type="hidden"/>
+                        <input name="page" type="hidden" value="1"/>
                         <label>
                             <select class="border border-gray-300 rounded-md px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                                     name="pageSize"
@@ -113,14 +124,14 @@
                         </label>
                     </form>
                     <span class="text-gray-600">
-                            第 <span class="font-semibold text-blue-600" th:text="${pageNumber}"></span> 页 /
+                            第 <span class="font-semibold text-blue-600" th:text="${page}"></span> 页 /
                             共 <span class="font-semibold text-blue-600" th:text="${totalPages}"></span> 页
                     </span>
 
                     <!-- 首页 -->
                     <a class="border border-gray-300 text-gray-700 hover:bg-gray-100 rounded-md px-2 py-1 text-sm flex items-center"
-                       th:classappend="${pageNumber == 1} ? 'pointer-events-none opacity-50' : ''"
-                       th:href="@{/student(projectId=${projectId}, page=1, pageSize=${pageSize})}">
+                       th:classappend="${page == 1} ? 'pointer-events-none opacity-50' : ''"
+                       th:href="@{/student(projectName=${projectName}, page=1, pageSize=${pageSize})}">
                         <!-- 双左箭头 -->
                         <svg class="size-6" fill="none" stroke="currentColor" stroke-width="1.5"
                              viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -131,8 +142,8 @@
 
                     <!-- 上一页 -->
                     <a class="border border-gray-300 text-gray-700 hover:bg-gray-100 rounded-md px-2 py-1 text-sm flex items-center"
-                       th:classappend="${pageNumber == 1} ? 'pointer-events-none opacity-50' : ''"
-                       th:href="@{/student(projectId=${projectId}, page=${pageNumber - 1}, pageSize=${pageSize})}">
+                       th:classappend="${page == 1} ? 'pointer-events-none opacity-50' : ''"
+                       th:href="@{/student(projectName=${projectName}, page=${page - 1}, pageSize=${pageSize})}">
                         <!-- 左箭头 -->
                         <svg class="size-6" fill="none" stroke="currentColor" stroke-width="1.5"
                              viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -142,8 +153,8 @@
 
                     <!-- 下一页 -->
                     <a class="border border-gray-300 text-gray-700 hover:bg-gray-100 rounded-md px-2 py-1 text-sm flex items-center"
-                       th:classappend="${pageNumber == totalPages} ? 'pointer-events-none opacity-50' : ''"
-                       th:href="@{/student(projectId=${projectId}, page=${pageNumber + 1}, pageSize=${pageSize})}">
+                       th:classappend="${page == totalPages} ? 'pointer-events-none opacity-50' : ''"
+                       th:href="@{/student(projectName=${projectName}, page=${page + 1}, pageSize=${pageSize})}">
                         <!-- 右箭头 -->
                         <svg class="size-6" fill="none" stroke="currentColor" stroke-width="1.5"
                              viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -153,8 +164,8 @@
 
                     <!-- 尾页 -->
                     <a class="border border-gray-300 text-gray-700 hover:bg-gray-100 rounded-md px-2 py-1 text-sm flex items-center"
-                       th:classappend="${pageNumber == totalPages} ? 'pointer-events-none opacity-50' : ''"
-                       th:href="@{/student(projectId=${projectId}, page=${totalPages}, pageSize=${pageSize})}">
+                       th:classappend="${page == totalPages} ? 'pointer-events-none opacity-50' : ''"
+                       th:href="@{/student(projectName=${projectName}, page=${totalPages}, pageSize=${pageSize})}">
                         <!-- 双右箭头 -->
                         <svg class="size-6" fill="none" stroke="currentColor" stroke-width="1.5"
                              viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -164,9 +175,8 @@
                     </a>
 
                     <!-- 添加学生 -->
-                    <a class="border border-gray-300 text-gray-700 hover:bg-gray-100 rounded-md px-2 py-1 text-sm flex items-center"
-                       th:classappend="${pageNumber == totalPages} ? 'pointer-events-none opacity-50' : ''"
-                       th:href="@{/student(projectId=${projectId}, page=${totalPages}, pageSize=${pageSize})}">
+                    <a class="border border-gray-300 text-gray-700 hover:bg-green-100 rounded-md px-2 py-1 text-sm flex items-center"
+                       href="#" onclick="openAddStudentModal(); return false;">
                         <!-- 添加图标 -->
                         <svg class="size-6" fill="none" stroke="currentColor" stroke-width="1.5"
                              viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -175,7 +185,7 @@
                     </a>
                     <!-- 删除学生 -->
                     <a class="border border-gray-300 text-gray-700 hover:bg-gray-100 rounded-md px-2 py-1 text-sm flex items-center"
-                       th:classappend="${pageNumber == totalPages} ? 'pointer-events-none opacity-50' : ''"
+                       th:classappend="${page == totalPages} ? 'pointer-events-none opacity-50' : ''"
                        th:href="@{/student(projectId=${projectId}, page=${totalPages}, pageSize=${pageSize})}">
                         <!-- 删除图标 -->
                         <svg class="size-6" fill="none" stroke="currentColor" stroke-width="1.5"
@@ -196,7 +206,7 @@
     <div class="bg-white rounded-lg p-6 w-full max-w-md">
         <div class="flex justify-between items-center mb-4">
             <h3 class="text-xl font-semibold text-gray-800">添加项目</h3>
-            <button class="text-gray-600 hover:text-gray-800" onclick="closeModal()">
+            <button class="text-gray-600 hover:text-gray-800" onclick="closeAddProjectModal()">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                      xmlns="http://www.w3.org/2000/svg">
                     <path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round"
@@ -204,7 +214,7 @@
                 </svg>
             </button>
         </div>
-        <form>
+        <form method="post" th:action="@{/addProject}" th:object="${project}">
             <div class="mb-4">
                 <label class="block text-sm font-medium text-gray-700" for="projectName">项目名称</label>
                 <input class="mt-1 p-2 w-full border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -212,7 +222,7 @@
                        type="text">
             </div>
             <div class="flex justify-end">
-                <button class="mr-2 px-4 py-2 bg-gray-200 rounded-md hover:bg-gray-300" onclick="closeModal()"
+                <button class="mr-2 px-4 py-2 bg-gray-200 rounded-md hover:bg-gray-300" onclick="closeAddProjectModal()"
                         type="button">
                     取消
                 </button>
@@ -223,7 +233,69 @@
     </div>
 </div>
 
+<!-- 添加学生弹窗 -->
+<div class="fixed inset-0 z-50 flex items-center justify-center hidden bg-gray-900 bg-opacity-50" id="addStudentModal">
+    <div class="bg-white rounded-lg p-6 w-full max-w-md">
+        <div class="flex justify-between items-center mb-4">
+            <h3 class="text-xl font-semibold text-gray-800">添加学生</h3>
+            <button class="text-gray-600 hover:text-gray-800" onclick="closeAddStudentModal()">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                     xmlns="http://www.w3.org/2000/svg">
+                    <path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round"
+                          stroke-width="2"></path>
+                </svg>
+            </button>
+        </div>
+        <form method="post" th:action="@{/addStudent}">
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-gray-700" for="id">学号</label>
+                <input class="mt-1 p-2 w-full border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                       id="id" name="id"
+                       type="text">
+            </div>
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-gray-700" for="studentName">学生姓名</label>
+                <input class="mt-1 p-2 w-full border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                       id="studentName" name="studentName"
+                       type="text">
+            </div>
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-gray-700" for="projectName">项目名字</label>
+                <input class="mt-1 p-2 w-full border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                       id="projectName" name="projectName"
+                       type="text">
+            </div>
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-gray-700" for="registrationDate">入学日期</label>
+                <input class="mt-1 p-2 w-full border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                       id="registrationDate" name="registrationDate"
+                       type="date">
+            </div>
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-gray-700" for="tuition">学费</label>
+                <input class="mt-1 p-2 w-full border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                       id="tuition" name="tuition"
+                       type="text">
+            </div>
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-gray-700" for="grades">成绩</label>
+                <input class="mt-1 p-2 w-full border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                       id="grades" name="grades"
+                       type="text">
+            </div>
+            <div class="flex justify-end">
+                <button class="mr-2 px-4 py-2 bg-gray-200 rounded-md hover:bg-gray-300" onclick="closeAddStudentModal()"
+                        type="button">
+                    取消
+                </button>
+                <button class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700" type="submit">保存
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
 
 </body>
 
 </html>
+
