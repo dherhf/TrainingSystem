@@ -23,7 +23,7 @@ public class AddStudent extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String id = req.getParameter("id");
         String studentName = req.getParameter("studentName");
-        int projectId = entityDAO.getProjectIdByName(req.getParameter("addStudentProjectName"));
+        int projectId = entityDAO.getProjectIdByName(req.getParameter("projectName"));
         LocalDate registrationDate = LocalDate.parse(req.getParameter("registrationDate"));
         int tuition = Integer.parseInt(req.getParameter("tuition"));
         int grades = Integer.parseInt(req.getParameter("grades"));

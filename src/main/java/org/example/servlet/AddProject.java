@@ -20,7 +20,7 @@ public class AddProject extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        String projectName = req.getParameter("addProjectName");
+        String projectName = req.getParameter("projectName");
         entityDAO.addProject(projectName);
         resp.sendRedirect(req.getContextPath() + "/student");
     }
