@@ -82,6 +82,25 @@ public class EntityDAO {
         }
     }
 
+    public void deleteStudent(String id, int projectId) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            session.beginTransaction();
+            Student student = session.createQuery(
+                            "FROM Student WHERE id = :id AND projectId = :projectId", Student.class)
+                    .setParameter("id", id)
+                    .setParameter("projectId", projectId)
+                    .uniqueResult();
+            if (student != null) {
+                // 如果学生记录存在，则删除该记录
+                session.remove(student);
+            }
+            // 提交事务
+            session.getTransaction().commit();
+        } catch (Exception e) {
+            log.error("删除学生时出错", e);
+        }
+
+    }
     public List<Student> getAllStudents() {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             return session.createQuery("FROM Student", Student.class).list();

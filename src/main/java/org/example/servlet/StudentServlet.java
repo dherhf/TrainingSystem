@@ -13,6 +13,9 @@ import org.thymeleaf.context.WebContext;
 import org.thymeleaf.web.servlet.JakartaServletWebApplication;
 
 import java.io.IOException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.time.LocalDate;
 import java.util.List;
 
 @WebServlet("/student")
@@ -67,40 +70,75 @@ public class StudentServlet extends HttpServlet {
         // 设置请求和响应的字符编码，防止中文乱码
         req.setCharacterEncoding("UTF-8");
         resp.setCharacterEncoding("UTF-8");
-        resp.setContentType("text/html;charset=UTF-8");
 
-        // 获取表单提交的操作类型，假设表单中有一个名为 'action' 的隐藏字段
-//        String action = req.getParameter("action");
-//
-//        if ("add".equals(action)) {
-//            // 处理添加学生的逻辑
-//            String studentName = req.getParameter("studentName");
-//            int projectId = Integer.parseInt(req.getParameter("projectId"));
-//
-//            // 创建新的学生对象
-//            Student newStudent = new Student();
-//            newStudent.setStudentName(studentName);
-//            newStudent.setProjectId(projectId);
-//
-//            // 调用 DAO 层方法添加学生
-//            entityDAO.addStudent(newStudent);
-//        } else if ("update".equals(action)) {
-//            // 处理更新学生的逻辑
-//            int studentId = Integer.parseInt(req.getParameter("studentId"));
-//            String studentName = req.getParameter("studentName");
-//            int projectId = Integer.parseInt(req.getParameter("projectId"));
-//
-//            // 创建更新后的学生对象
-//            Student updatedStudent = new Student();
-//            updatedStudent.setStudentId(studentId);
-//            updatedStudent.setStudentName(studentName);
-//            updatedStudent.setProjectId(projectId);
-//
-//            // 调用 DAO 层方法更新学生信息
-//            entityDAO.updateStudent(updatedStudent);
-//        }
+        // 获取操作类型
+        String method = req.getParameter("method");
 
-        // 重定向到学生列表页面
-        resp.sendRedirect(req.getContextPath() + "/student");
+        if ("deleteStudent".equals(method)) {
+            // 获取学生ID和项目名称
+            String idParam = req.getParameter("id");
+            String projectName = req.getParameter("projectName");
+            int projectId = entityDAO.getProjectIdByName(projectName);
+            String page = req.getParameter("page");
+            String pageSize = req.getParameter("pageSize");
+
+            try {
+
+                entityDAO.deleteStudent(idParam, projectId);
+                String redirectUrl = String.format(
+                        "%s/student?projectName=%s&page=%s&pageSize=%s",
+                        req.getContextPath(),
+                        URLEncoder.encode(projectName, StandardCharsets.UTF_8),
+                        page,
+                        pageSize
+                );
+                // 删除成功后重定向回原项目页面
+                resp.sendRedirect(redirectUrl);
+            } catch (Exception e) {
+                // 记录错误并跳转错误页或提示失败
+                req.setAttribute("error", "删除失败：" + e.getMessage());
+                try {
+                    req.getRequestDispatcher("/error.jsp").forward(req, resp);
+                } catch (ServletException ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
+        } else if ("addProject".equals(method)) {
+            String projectName = req.getParameter("projectName");
+            entityDAO.addProject(projectName);
+            String page = req.getParameter("page");
+            String pageSize = req.getParameter("pageSize");
+            String redirectUrl = String.format(
+                    "%s/student?projectName=%s&page=%s&pageSize=%s",
+                    req.getContextPath(),
+                    URLEncoder.encode(projectName, StandardCharsets.UTF_8),
+                    page,
+                    pageSize
+            );
+            // 删除成功后重定向回原项目页面
+            resp.sendRedirect(redirectUrl);
+        } else if ("addStudent".equals(method)) {
+            String id = req.getParameter("id");
+            String studentName = req.getParameter("studentName");
+            String projectName = req.getParameter("projectName");
+            int projectId = entityDAO.getProjectIdByName(projectName);
+            LocalDate registrationDate = LocalDate.parse(req.getParameter("registrationDate"));
+            int tuition = Integer.parseInt(req.getParameter("tuition"));
+            int grades = Integer.parseInt(req.getParameter("grades"));
+            entityDAO.addStudent(id, projectId, studentName, registrationDate, tuition, grades);
+
+            String page = req.getParameter("page");
+            String pageSize = req.getParameter("pageSize");
+            String redirectUrl = String.format(
+                    "%s/student?projectName=%s&page=%s&pageSize=%s",
+                    req.getContextPath(),
+                    URLEncoder.encode(projectName, StandardCharsets.UTF_8),
+                    page,
+                    pageSize
+            );
+            // 删除成功后重定向回原项目页面
+            resp.sendRedirect(redirectUrl);
+
+        }
     }
 }
