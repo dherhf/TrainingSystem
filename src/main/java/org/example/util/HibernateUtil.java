@@ -11,8 +11,6 @@ import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.sql.DataSource;
 
@@ -20,7 +18,6 @@ public class HibernateUtil {
 
     @Getter
     private static final SessionFactory sessionFactory;
-    private static final Logger log = LoggerFactory.getLogger(HibernateUtil.class);
 
     static {
         try {
@@ -57,8 +54,7 @@ public class HibernateUtil {
 
             sessionFactory = configuration.buildSessionFactory(serviceRegistry);
         } catch (HibernateException e) {
-            log.error("SessionFactory初始化失败", e);
-            throw new RuntimeException(e);
+            throw new RuntimeException("SessionFactory初始化失败", e);
         }
     }
 
