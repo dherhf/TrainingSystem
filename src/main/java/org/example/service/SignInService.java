@@ -13,11 +13,11 @@ public class SignInService {
     public boolean auth(String username, String password, HttpSession session) {
         User user = entityDAO.fetchUser(username);
         if (user == null || !user.checkPassword(password)) {
-            log.warn("用户密码或账号错误: {}", username);
+            log.warn("用户密码或账号错误");
             return false;
         } else {
             session.setAttribute("user", user);
-            log.info("用户成功登录: {}", username);
+            log.info("用户成功登录");
             return true;
         }
 
