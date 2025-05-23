@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Base64;
 
@@ -52,9 +53,9 @@ public class User {
             StringBuilder sb = new StringBuilder();
             for (byte b : bytes) sb.append(String.format("%02x", b));
             return sb.toString();
-        } catch (Exception e) {
+        } catch (NoSuchAlgorithmException e) {
             log.error("MD5 哈希失败", e);
-            throw new RuntimeException("MD5 哈希失败", e);
+            return null;
         }
     }
 
@@ -63,7 +64,7 @@ public class User {
             log.warn("用户的 salt 或 passwordHash 为 null： {}", this.name);
             return false;
         }
-        return hashPassword(inputPassword, this.salt).equals(this.passwordHash);
+        return this.passwordHash.equals(hashPassword(inputPassword, this.salt));
     }
 
 }
