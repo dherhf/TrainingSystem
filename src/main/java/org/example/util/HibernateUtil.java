@@ -58,8 +58,5 @@ public class HibernateUtil {
         }
     }
 
-    public HibernateUtil() {
-    }
-
 }
 
