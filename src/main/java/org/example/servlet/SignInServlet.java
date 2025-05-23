@@ -1,6 +1,5 @@
 package org.example.servlet;
 
-import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -19,7 +18,7 @@ public class SignInServlet extends HttpServlet {
     SignInService service;
 
     @Override
-    public void init() throws ServletException {
+    public void init() {
         service = new SignInService();
         // 触发 Hibernate 预热
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
@@ -30,7 +29,7 @@ public class SignInServlet extends HttpServlet {
     }
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         Context context = new Context();
         if (req.getSession().getAttribute("SignIn-failed") != null) {
             context.setVariable("failed",true);
@@ -44,14 +43,13 @@ public class SignInServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         //首先设置一下响应类型
         resp.setContentType("text/html;charset=UTF-8");
 
         //获取POST请求携带的表单数据
         String username = req.getParameter("username");
         String password = req.getParameter("password");
-        String remember = req.getParameter("remember-me");
 
         if (service.auth(username, password, req.getSession())) {
             resp.sendRedirect("dashboard");
