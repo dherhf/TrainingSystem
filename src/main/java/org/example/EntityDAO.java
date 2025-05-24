@@ -39,6 +39,18 @@ public class EntityDAO {
 
     }
 
+    public boolean auth(String username, String password) {
+        User user = fetchUser(username);
+        if (user.checkPassword(password)) {
+            log.info("用户成功登录");
+            return true;
+        } else {
+            log.warn("用户密码或账号错误");
+            return false;
+        }
+
+    }
+
     public User fetchUser(String username) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
@@ -52,7 +64,7 @@ public class EntityDAO {
             return session.createQuery(criteriaQuery).getSingleResult();
         } catch (Exception e) {
             log.error("查询用户失败: {}", username, e);
-            return null;
+            return new User();
         }
     }
 
@@ -217,31 +229,6 @@ public class EntityDAO {
         }
         return 0;
     }
-
-    public void addStudentsToProjects() {
-        List<Project> projects = getAllProject();
-        if (projects != null) {
-            for (Project project : projects) {
-                try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-                    session.beginTransaction();
-                    for (int i = 1; i <= 200; i++) {
-                        Student student = new Student();
-                        student.setId("B" + String.format("%04d", project.getId()) + String.format("%03d", i));
-                        student.setStudentName("Student " + i);
-                        student.setProjectId(project.getId());
-                        student.setRegistrationDate(LocalDate.now()); // 初始化 registrationDate 字段
-                        student.setTuition(0); // 初始化 tuition 字段
-                        student.setGrades(0); // 初始化 grades 字段
-                        session.persist(student);
-                    }
-                    session.getTransaction().commit();
-                } catch (Exception e) {
-                    log.error("为项目添加学生时出错", e);
-                }
-            }
-        }
-    }
-
 
 
 

@@ -30,24 +30,6 @@
         function closeAddStudentModal() {
             document.getElementById('addStudentModal').style.display = 'none';
         }
-
-        function deleteStudent(studentId) {
-            if (confirm('确定要删除该学生吗？')) {
-                fetch(`/students/${studentId}`, {
-                    method: 'DELETE'
-                })
-                    .then(response => response.text())
-                    .then(message => {
-                        alert(message);
-                        // 重新加载页面以更新学生列表
-                        window.location.reload();
-                    })
-                    .catch(error => {
-                        console.error('删除失败:', error);
-                        alert('删除学生时发生错误');
-                    });
-            }
-        }
     </script>
 </head>
 <body class="flex bg-gray-100 min-h-screen">

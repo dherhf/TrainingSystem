@@ -5,13 +5,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>登录 - TrainingSystem</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* 在 tailwind.config.js 或单独的 CSS 文件中 */
+        @layer base {
+            /* 针对自动填充的输入框 */
+            input:-webkit-autofill,
+            textarea:-webkit-autofill,
+            select:-webkit-autofill {
+                /* 使用 Tailwind 的字体大小类（如 text-base） */
+                font-size: theme('fontSize.base') !important; /* 对应 text-base */
+                /* 可选：重置其他可能冲突的样式（如背景色、边框等） */
+                -webkit-box-shadow: 0 0 0 1000px white inset !important; /* 清除黄色背景 */
+                transition: background-color 5000s ease-in-out 0s !important;
+            }
 
+            /* 点击输入框后的样式（可选） */
+            input:-webkit-autofill:focus,
+            textarea:-webkit-autofill:focus,
+            select:-webkit-autofill:focus {
+                font-size: inherit !important; /* 继承父级字体大小 */
+            }
+        }
+    </style>
 </head>
 <body class="min-h-screen flex items-center justify-center bg-gray-100">
 
 <div class="bg-white shadow-xl rounded-lg w-full max-w-2xl p-8">
     <!-- 左侧内容 -->
-    <div class="w-full lg:w-1/ mx-auto">
+    <div class="w-full mx-auto">
         <h2 class="text-3xl font-semibold mb-2 text-center">
             <span class="text-blue-600">Hello,</span> Welcome!
         </h2>
@@ -55,7 +76,7 @@
                     <input type="checkbox" class="mr-2" name="remember-me">
                     记住我
                 </label>
-                <a href="forgot-pws.html" class="text-blue-600 hover:underline">忘记密码?</a>
+                <a class="text-blue-600 hover:underline" href="forgot-pws">忘记密码?</a>
             </div>
 
             <!-- 登录和注册按钮 -->
@@ -64,7 +85,7 @@
                         class="w-1/2 bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg font-medium transition mr-2">
                     登录
                 </button>
-                <a href="sign-up.html"
+                <a href="sign-up"
                    class="w-1/2 bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-lg font-medium text-center transition">
                     注册
                 </a>
