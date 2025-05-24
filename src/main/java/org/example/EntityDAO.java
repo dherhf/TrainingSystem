@@ -29,7 +29,7 @@ public class EntityDAO {
             session.persist(newUser);
 
             session.getTransaction().commit();
-
+            username = username.replaceAll("[\n\r]", "_");
             log.info("用户 {} 注册成功", username);
             return true;
         } catch (Exception e) {
